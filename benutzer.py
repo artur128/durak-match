@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'benutzer.ui'
 #
-# Created: Tue Oct 22 21:01:27 2013
+# Created: Thu Oct 24 18:49:05 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -39,7 +39,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.addPlayer)
         self.countplayers = QtGui.QSpinBox(self.widget)
         self.countplayers.setMinimum(2)
-        self.countplayers.setMaximum(99)
+        self.countplayers.setMaximum(6)
         self.countplayers.setProperty("value", 4)
         self.countplayers.setObjectName(_fromUtf8("countplayers"))
         self.horizontalLayout.addWidget(self.countplayers)
@@ -61,7 +61,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setMargin(0)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.spieler = QtGui.QTableWidget(self.widget_2)
-        self.spieler.setMaximumSize(QtCore.QSize(300, 16777215))
+        self.spieler.setMaximumSize(QtCore.QSize(30000, 16777215))
         self.spieler.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.spieler.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.spieler.setObjectName(_fromUtf8("spieler"))
@@ -94,6 +94,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.games)
         self.verticalLayout_2.addWidget(self.widget_4)
         self.playedwith = QtGui.QTableWidget(self.widget_3)
+        self.playedwith.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+        self.playedwith.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.playedwith.setObjectName(_fromUtf8("playedwith"))
         self.playedwith.setColumnCount(3)
         self.playedwith.setRowCount(0)
@@ -115,9 +117,11 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.addPlayer, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.addplayer)
         QtCore.QObject.connect(self.newPlayerName, QtCore.SIGNAL(_fromUtf8("returnPressed()")), MainWindow.addplayer)
-        QtCore.QObject.connect(self.spieler, QtCore.SIGNAL(_fromUtf8("cellChanged(int,int)")), MainWindow.save)
+        QtCore.QObject.connect(self.spieler, QtCore.SIGNAL(_fromUtf8("cellChanged(int,int)")), MainWindow.cell_changed)
         QtCore.QObject.connect(self.spieler, QtCore.SIGNAL(_fromUtf8("doubleClicked(QModelIndex)")), MainWindow.deleteplayer)
         QtCore.QObject.connect(self.spieler, QtCore.SIGNAL(_fromUtf8("currentCellChanged(int,int,int,int)")), MainWindow.update_playedwith)
+        QtCore.QObject.connect(self.countplayers, QtCore.SIGNAL(_fromUtf8("valueChanged(QString)")), MainWindow.players_per_table_changed)
+        QtCore.QObject.connect(self.counttables, QtCore.SIGNAL(_fromUtf8("valueChanged(QString)")), MainWindow.tables_changed)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.newPlayerName, self.addPlayer)
         MainWindow.setTabOrder(self.addPlayer, self.spieler)
@@ -128,7 +132,6 @@ class Ui_MainWindow(object):
         self.addPlayer.setText(QtGui.QApplication.translate("MainWindow", "Hinzufügen", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("MainWindow", "Spieler pro", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setText(QtGui.QApplication.translate("MainWindow", "Tische", None, QtGui.QApplication.UnicodeUTF8))
-        self.spieler.setSortingEnabled(True)
         item = self.spieler.horizontalHeaderItem(0)
         item.setText(QtGui.QApplication.translate("MainWindow", "Num", None, QtGui.QApplication.UnicodeUTF8))
         item = self.spieler.horizontalHeaderItem(1)
