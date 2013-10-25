@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'benutzer.ui'
 #
-# Created: Thu Oct 24 18:49:05 2013
+# Created: Fri Oct 25 14:55:14 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -62,6 +62,12 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.spieler = QtGui.QTableWidget(self.widget_2)
         self.spieler.setMaximumSize(QtCore.QSize(30000, 16777215))
+        self.spieler.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.spieler.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
+        self.spieler.setAcceptDrops(False)
+        self.spieler.setDragEnabled(True)
+        self.spieler.setDragDropOverwriteMode(False)
+        self.spieler.setDragDropMode(QtGui.QAbstractItemView.DragDrop)
         self.spieler.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.spieler.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.spieler.setObjectName(_fromUtf8("spieler"))
@@ -132,6 +138,7 @@ class Ui_MainWindow(object):
         self.addPlayer.setText(QtGui.QApplication.translate("MainWindow", "Hinzufügen", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("MainWindow", "Spieler pro", None, QtGui.QApplication.UnicodeUTF8))
         self.label_4.setText(QtGui.QApplication.translate("MainWindow", "Tische", None, QtGui.QApplication.UnicodeUTF8))
+        self.spieler.setSortingEnabled(False)
         item = self.spieler.horizontalHeaderItem(0)
         item.setText(QtGui.QApplication.translate("MainWindow", "Num", None, QtGui.QApplication.UnicodeUTF8))
         item = self.spieler.horizontalHeaderItem(1)

@@ -9,6 +9,53 @@ import sqlite3
 import math
 
 
+class MyTable(QtGui.QTableWidget):
+	def __init__(self, rows, columns, parent):
+		super(MyTable, self).__init__(rows, columns, parent)
+		self.setColumnCount(3)
+		self.horizontalHeader().setStretchLastSection(True)
+		self.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+		self.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+		self.setAcceptDrops(True)
+		self.setDragEnabled(True)
+		self.setDropIndicatorShown(True)
+
+	def dragEnterEvent(self, e):
+		if e.source()!=self:
+			e.accept()
+
+	def dropEvent(self, e):
+		e.setDropAction(QtCore.Qt.CopyAction)
+
+
+		if e.source().__class__.__name__==self.__class__.__name__:
+			pid=e.source().item(e.source().currentRow(),0).text()
+			place=e.source().item(e.source().currentRow(),1).text()
+			name=e.source().item(e.source().currentRow(),2).text()
+			e.source().removeRow(e.source().currentRow())
+		else:
+			pid=e.source().item(e.source().currentRow(),0).text()
+			place='0'
+			name=e.source().item(e.source().currentRow(),2).text()
+
+		x=self.rowCount()+1
+		self.setRowCount(x)
+		x=x-1
+
+		tmp=QtGui.QTableWidgetItem(pid)
+		tmp.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+		self.setItem(x,0,tmp)
+
+		tmp=QtGui.QTableWidgetItem(place)
+		self.setItem(x,1,tmp)
+
+		tmp=QtGui.QTableWidgetItem(name)
+		tmp.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
+		self.setItem(x,2,tmp)
+
+
+
+		e.accept()
 
 
 class BeamerWindow(QtGui.QMainWindow, beamer_window):
@@ -30,13 +77,9 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 		self.tables=[]
 		c=0
 		for t in range(0,tables):
-				a = QtGui.QTableWidget(0,0,self.widget_3)
+				a = MyTable(0,0,self.widget_3)
 				a.setObjectName("a-"+str(t))
-				a.setColumnCount(3)
-				a.horizontalHeader().setStretchLastSection(True)
-				a.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
-				a.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-				a.setSortingEnabled(True)
+
 				item = QtGui.QTableWidgetItem()
 				item.setText("Tisch-"+str(t+1))
 				a.setHorizontalHeaderItem(2, item)
@@ -51,8 +94,6 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 
 				a.setColumnHidden(0,True)
 				a.horizontalHeader().setStretchLastSection(True)
-				a.setSortingEnabled(True)
-				a.sortByColumn(1,QtCore.Qt.DescendingOrder)
 				a.setRowCount(0)
 				self.gridLayout.addWidget(a, c, t-c*columns, 1, 1)
 				self.tables.append(a)
@@ -80,7 +121,7 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 		self.refresh_layout()
 		o=self.game.get_tables_allocation()
 		for a in range(0,len(o)):
-			self.tables[a].setSortingEnabled(False)
+	#		self.tables[a].setSortingEnabled(False)
 			self.tables[a].setRowCount(len(o[a]))
 			for x in range(0,len(o[a])):
 				tmp=QtGui.QTableWidgetItem(o[a][x]['pid'])
@@ -91,7 +132,7 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 				tmp=QtGui.QTableWidgetItem(o[a][x]['name'])
 				tmp.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
 				self.tables[a].setItem(x,2,tmp)
-			self.tables[a].setSortingEnabled(True)
+	#		self.tables[a].setSortingEnabled(True)
 
 
 				
@@ -113,6 +154,15 @@ class MainWindow(QtGui.QMainWindow, mainwindow):
 		self.playedwith.sortByColumn(2,QtCore.Qt.DescendingOrder)
 		self.playedwith.setSortingEnabled(True)
 		self.refresh_player_list()
+		def dropEvent(e):
+			e.setDropAction(QtCore.Qt.CopyAction)
+			e.source().removeRow(e.source().currentRow())
+			e.accept
+		def dragEnterEvent(self, e):
+			if e.source()!=self:
+				e.accept()
+		self.spieler.dropEvent=dropEvent
+		self.spieler.dragEnterEvent=lambda x: dragEnterEvent(self.spieler,x)
 	def deleteplayer(self,a):
 		if self.spieler.currentColumn() == 2:
 			if QtGui.QMessageBox.Yes==QtGui.QMessageBox.question(self, 'Message',u"Spieler wirklich löschen?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No):
@@ -139,9 +189,8 @@ class MainWindow(QtGui.QMainWindow, mainwindow):
 	def refresh_player_list(self):
 		self.not_refresh_data=False
 		k=self.game.get_all_players()
-		print k
-		self.spieler.setRowCount(len(k))
 		self.spieler.setSortingEnabled(False)
+		self.spieler.setRowCount(len(k))
 		for i in range(0,len(k)):
 			tmp=QtGui.QTableWidgetItem(unicode(k[i]['id']))
 			tmp.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
@@ -152,8 +201,8 @@ class MainWindow(QtGui.QMainWindow, mainwindow):
 			self.spieler.setItem(i,2,tmp)
 		self.spieler.setSortingEnabled(True)
 		self.not_refresh_data=True
-		if self.spieler.currentRow()!=-1:
-			self.update_playedwith(self.spieler.currentColumn(),self.spieler.currentRow(),-1,-1)
+	#	if self.spieler.currentRow()!=-1:
+	#		self.update_playedwith(self.spieler.currentColumn(),self.spieler.currentRow(),-1,-1)
 	def update_playedwith(self,a,b,aa,bb):
 		player1id=self.spieler.item(a,0).text()
 		k=self.game.get_played_with_for_player(int(player1id))
