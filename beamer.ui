@@ -90,9 +90,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>beamer</receiver>
+   <slot>reroll_button()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>437</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>8</x>
+     <y>416</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>refresh_button()</slot>
   <slot>done_game()</slot>
+  <slot>reroll_button()</slot>
  </slots>
 </ui>

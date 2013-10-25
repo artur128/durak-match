@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'beamer.ui'
 #
-# Created: Fri Oct 25 14:55:14 2013
+# Created: Fri Oct 25 16:23:01 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -54,6 +54,7 @@ class Ui_beamer(object):
         self.retranslateUi(beamer)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL(_fromUtf8("clicked()")), beamer.refresh_button)
         QtCore.QObject.connect(self.pushButton_2, QtCore.SIGNAL(_fromUtf8("clicked()")), beamer.done_game)
+        QtCore.QObject.connect(self.pushButton_3, QtCore.SIGNAL(_fromUtf8("clicked()")), beamer.reroll_button)
         QtCore.QMetaObject.connectSlotsByName(beamer)
 
     def retranslateUi(self, beamer):

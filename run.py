@@ -7,11 +7,13 @@ from benutzer import Ui_MainWindow as mainwindow
 from beamer import Ui_beamer as beamer_window
 import sqlite3
 import math
+import pickle
 
 
 class MyTable(QtGui.QTableWidget):
-	def __init__(self, rows, columns, parent):
+	def __init__(self, rows, columns, parent,update_games):
 		super(MyTable, self).__init__(rows, columns, parent)
+		self.update_games=update_games
 		self.setColumnCount(3)
 		self.horizontalHeader().setStretchLastSection(True)
 		self.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
@@ -23,6 +25,10 @@ class MyTable(QtGui.QTableWidget):
 	def dragEnterEvent(self, e):
 		if e.source()!=self:
 			e.accept()
+	
+	def removeRow(self,row):
+		super(MyTable, self).removeRow(row)
+		self.update_games()
 
 	def dropEvent(self, e):
 		e.setDropAction(QtCore.Qt.CopyAction)
@@ -52,19 +58,21 @@ class MyTable(QtGui.QTableWidget):
 		tmp=QtGui.QTableWidgetItem(name)
 		tmp.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
 		self.setItem(x,2,tmp)
-
-
-
 		e.accept()
+
+		self.update_games()
 
 
 class BeamerWindow(QtGui.QMainWindow, beamer_window):
-	def __init__(self,game):
+	def __init__(self,game,mdlg):
 		QtGui.QDialog.__init__(self)
 		self.setupUi(self)
 		self.game=game
 		self.tables=[]
-		self.refresh_layout()
+		self.refresh_button()
+		self.mdlg=mdlg
+	def update_games(self):
+		self.game.set_table_allocation([[ int(t.item(row,0).text()) for row in range(0,t.rowCount())] for t in self.tables])
 	def refresh_layout(self):
 		players=self.game.get_players_per_table()
 		columns=int(math.ceil(float(self.game.get_tables())**(0.5)))
@@ -77,7 +85,7 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 		self.tables=[]
 		c=0
 		for t in range(0,tables):
-				a = MyTable(0,0,self.widget_3)
+				a = MyTable(0,0,self.widget_3,self.update_games)
 				a.setObjectName("a-"+str(t))
 
 				item = QtGui.QTableWidgetItem()
@@ -100,23 +108,21 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 				if (t+1)%columns==0:
 					c+=1
 	def done_game(self):
-		for x in range(0,len(self.games)):
-			if self.tables[x].currentRow() == -1:
-				QtGui.QMessageBox.question(self, 'Message',u"Nicht genug Duraks ausgewählt", QtGui.QMessageBox.Ok)
-				return
-		for x in range(0,len(self.tables)):
-			for y in range(0,self.tables[x].rowCount()):
-				if y != self.tables[x].currentRow():
-					self.conn_cursor.execute("UPDATE players set points=points+1 where name=?",(unicode(self.tables[x].item(y,0).text()),))
-					self.conn.commit()
-				for z in range(0,self.tables[x].rowCount()):
-					self.conn_cursor.execute("""INSERT INTO player_to_player (player1,player2) SELECT
-					p1.id,p2.id from players as p1,players as p2 where p1.name=? and p2.name=?""",(
-					unicode(self.tables[x].item(y,0).text()),
-					unicode(self.tables[x].item(z,0).text())))
-					self.conn.commit()
+		newpoints={}
+		for x in self.tables:
+			for y in range(0,x.rowCount()):
+				newpoints.setdefault(int(x.item(y,0).text()),0)
+				newpoints[int(x.item(y,0).text())]+=int(x.item(y,1).text())
+		print newpoints
+		self.game.newpoints(newpoints)
+		self.mdlg.refresh_player_list()
+		self.reroll_button()
+
+
+	
+	def reroll_button(self):
+		o=self.game.new_table_allocation()
 		self.refresh_button()
-		self.mdlg.refresh_data()
 	def refresh_button(self):
 		self.refresh_layout()
 		o=self.game.get_tables_allocation()
@@ -124,7 +130,7 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 	#		self.tables[a].setSortingEnabled(False)
 			self.tables[a].setRowCount(len(o[a]))
 			for x in range(0,len(o[a])):
-				tmp=QtGui.QTableWidgetItem(o[a][x]['pid'])
+				tmp=QtGui.QTableWidgetItem("%d"%(o[a][x]['pid']))
 				tmp.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
 				self.tables[a].setItem(x,0,tmp)
 				tmp=QtGui.QTableWidgetItem("0")
@@ -201,8 +207,8 @@ class MainWindow(QtGui.QMainWindow, mainwindow):
 			self.spieler.setItem(i,2,tmp)
 		self.spieler.setSortingEnabled(True)
 		self.not_refresh_data=True
-	#	if self.spieler.currentRow()!=-1:
-	#		self.update_playedwith(self.spieler.currentColumn(),self.spieler.currentRow(),-1,-1)
+		if self.spieler.currentRow()!=-1:
+			self.update_playedwith(self.spieler.currentColumn(),self.spieler.currentRow(),-1,-1)
 	def update_playedwith(self,a,b,aa,bb):
 		player1id=self.spieler.item(a,0).text()
 		k=self.game.get_played_with_for_player(int(player1id))
@@ -253,7 +259,23 @@ class spieler():
 			return 0
 
 class Game():
-	def get_tables_allocation(self):
+	def newpoints(self,a):
+		for k in a.keys():
+			self.db_cursor.execute("UPDATE players set points=points+? where id=?",(int(a[k]),k))
+		for x in self.games:
+			for p1 in x:
+				for p2 in x:
+					self.db_cursor.execute("""INSERT INTO player_to_player (player1,player2) VALUES (?,?)""",(p1.pid,p2.pid))
+		self.db_connection.commit()
+	def set_table_allocation(self,a):
+		self.db_cursor.execute("""SELECT * from players order by points""")
+		gamers=dict([(int(x['id']),spieler(x['name'],x['id'],x['points'])) for x in self.db_cursor.fetchall()])
+		for m in gamers.values():
+			for x in self.get_played_with_for_player(m.pid):
+				m.setprevgamer(x['player2name'],int(x['matches']))
+		self.games=[[gamers[k] for k in t] for t in a]
+		pickle.dump([[y.pid for y in x] for x in self.games],open("save_game","wb"))
+	def new_table_allocation(self):
 		self.db_cursor.execute("""SELECT * from players order by points""")
 		gamers=[spieler(x['name'],x['id'],x['points']) for x in self.db_cursor.fetchall()]
 
@@ -273,7 +295,11 @@ class Game():
 			if len(to_play_with)>1:
 				games.append(to_play_with)
 		self.games=games
-		return [[{'name':y.name,'pid':y.pid,'points':y.points} for y in x]for x in games]
+		pickle.dump([[y.pid for y in x] for x in self.games],open("save_game","wb"))
+	def get_tables_allocation(self):
+		if self.games==None:
+			self.new_table_allocation()
+		return [[{'name':y.name,'pid':y.pid,'points':y.points} for y in x]for x in self.games]
 	def set_players_per_table(self,i):
 		self.players_per_table=i
 	def get_players_per_table(self):
@@ -342,13 +368,17 @@ CREATE TABLE
 			player2 REFERENCES players(id) ON DELETE CASCADE 
 		)""")
 			self.db_connection.commit()
+		try:
+			self.set_table_allocation(pickle.load(open("save_game")))
+		except:
+			self.games=None
 
 			
 if __name__ == "__main__":
 	game=Game()
 	app = QtGui.QApplication(sys.argv) 
 	mw = MainWindow(game) 
-	bw = BeamerWindow(game) 
+	bw = BeamerWindow(game,mw) 
 	bw.show()
 	mw.show() 
 	sys.exit(app.exec_())
