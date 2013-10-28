@@ -302,10 +302,12 @@ class Game():
 		return [[{'name':y.name,'pid':y.pid,'points':y.points} for y in x]for x in self.games]
 	def set_players_per_table(self,i):
 		self.players_per_table=i
+		open("players_per_table").write(str(i))
 	def get_players_per_table(self):
 		return self.players_per_table
 	def set_tables(self,i):
 		self.tables=i
+		open("tables").write(str(i))
 	def get_tables(self):
 		return self.tables
 	def get_played_with_for_player(self,pid):
@@ -339,8 +341,14 @@ ORDER BY
 		self.db_cursor.execute("""DELETE FROM players where id=? """,(pid,))
 		self.db_connection.commit()
 	def __init__(self):
-		self.players_per_table=3
-		self.tables=8
+		try:
+			self.players_per_table=int(open("players_per_table").read())
+		except:
+			self.players_per_table=4
+		try:
+			self.tables=int(open("tables").read())
+		except:
+			self.tables=8
 		self.db_connection = sqlite3.connect("durak.sql",detect_types=sqlite3.PARSE_DECLTYPES)
 		self.db_connection.row_factory=sqlite3.Row
 		self.db_connection.isolation_level = None
