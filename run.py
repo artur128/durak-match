@@ -302,6 +302,8 @@ class Game():
 			if len(to_play_with)>1:
 				games.append(to_play_with)
 		self.games=games
+		print "not in game:"
+		print "\n".join([y.name for y in filter(lambda x: x.selected==False,gamers)])
 		pickle.dump([[y.pid for y in x] for x in self.games],open("save_game","wb"))
 	def get_tables_allocation(self):
 		if self.games==None:
