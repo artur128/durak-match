@@ -289,7 +289,7 @@ class Game():
 			best_gamer.select()
 			to_play_with=[best_gamer]
 			while len(to_play_with)<self.players_per_table and len(filter(lambda x: x.selected==False,reversed(sorted(gamers,key=lambda x: x.points))))>0:
-				x=filter(lambda x: x.selected==False,reversed(sorted(gamers,key=lambda x: sum([x.getprevgamercount(m) for m in to_play_with])*1000+x.points )))[0]
+				x=filter(lambda x: x.selected==False,reversed(sorted(gamers,key=lambda x: sum([x.getprevgamercount(m) for m in to_play_with])*-1000+x.points )))[0]
 				x.select()
 				to_play_with.append(x)
 			if len(to_play_with)>1:
