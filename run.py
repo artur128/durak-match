@@ -222,9 +222,9 @@ class MainWindow(QtGui.QMainWindow, mainwindow):
 		self.playedwith.setSortingEnabled(False)
 		for i in range(0,len(k)):
 			if int(k[i]['p2id'])==int(player1id):
-				self.games.setText(str(k[i]['matches']))
+				self.games.setText(unicode(k[i]['matches']))
 			else:
-				tmp=QtGui.QTableWidgetItem(str(k[i]['player2name']))
+				tmp=QtGui.QTableWidgetItem(unicode(k[i]['player2name']))
 				tmp.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
 				self.playedwith.setItem(counteri,0,tmp)
 				tmp=QtGui.QTableWidgetItem(str(k[i]['p2id']))
