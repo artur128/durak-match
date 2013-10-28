@@ -108,7 +108,7 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 				a.setColumnWidth(0,40)
 				a.setColumnWidth(1,40)
 
-#				a.setColumnHidden(0,True)
+				a.setColumnHidden(0,True)
 				a.horizontalHeader().setStretchLastSection(True)
 				a.setRowCount(0)
 				self.gridLayout.addWidget(a, c, t-c*columns, 1, 1)
