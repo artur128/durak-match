@@ -26,6 +26,7 @@ class MyTable(QtGui.QTableWidget):
 		fo.setPointSize(18)
 		self.setFont(fo)
 
+
 	def dragEnterEvent(self, e):
 		if e.source()!=self:
 			e.accept()
@@ -103,6 +104,9 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 				item = QtGui.QTableWidgetItem()
 				item.setText("#")
 				a.setHorizontalHeaderItem(1, item)
+
+				a.setColumnWidth(0,70)
+				a.setColumnWidth(1,70)
 
 #				a.setColumnHidden(0,True)
 				a.horizontalHeader().setStretchLastSection(True)
