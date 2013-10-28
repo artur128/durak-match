@@ -167,7 +167,7 @@ class MainWindow(QtGui.QMainWindow, mainwindow):
 		def dropEvent(e):
 			e.setDropAction(QtCore.Qt.CopyAction)
 			e.source().removeRow(e.source().currentRow())
-			e.accept
+			e.accept()
 		def dragEnterEvent(self, e):
 			if e.source()!=self:
 				e.accept()
@@ -177,7 +177,7 @@ class MainWindow(QtGui.QMainWindow, mainwindow):
 		if self.spieler.currentColumn() == 2:
 			if QtGui.QMessageBox.Yes==QtGui.QMessageBox.question(self, 'Message',u"Spieler wirklich löschen?", QtGui.QMessageBox.Yes, QtGui.QMessageBox.No):
 				self.game.delete_player(int(self.spieler.item(self.spieler.currentRow(),0).text()))
-		self.refresh_player_list()
+				self.refresh_player_list()
 	def addplayer(self):
 		try:
 			self.game.add_player(unicode(self.newPlayerName.text()))
