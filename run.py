@@ -117,7 +117,6 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 			for y in range(0,x.rowCount()):
 				newpoints.setdefault(int(x.item(y,0).text()),0)
 				newpoints[int(x.item(y,0).text())]+=int(x.item(y,1).text())
-		print newpoints
 		self.game.newpoints(newpoints)
 		self.mdlg.refresh_player_list()
 		self.reroll_button()
