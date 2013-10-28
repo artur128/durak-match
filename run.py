@@ -105,8 +105,8 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 				item.setText("#")
 				a.setHorizontalHeaderItem(1, item)
 
-				a.setColumnWidth(0,30)
-				a.setColumnWidth(1,30)
+				a.setColumnWidth(0,40)
+				a.setColumnWidth(1,40)
 
 #				a.setColumnHidden(0,True)
 				a.horizontalHeader().setStretchLastSection(True)
