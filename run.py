@@ -104,7 +104,7 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 				item.setText("#")
 				a.setHorizontalHeaderItem(1, item)
 
-				a.setColumnHidden(0,True)
+#				a.setColumnHidden(0,True)
 				a.horizontalHeader().setStretchLastSection(True)
 				a.setRowCount(0)
 				self.gridLayout.addWidget(a, c, t-c*columns, 1, 1)
@@ -156,10 +156,10 @@ class MainWindow(QtGui.QMainWindow, mainwindow):
 		self.not_refresh_data=True
 		self.countplayers.setValue(self.game.get_players_per_table())
 		self.counttables.setValue(self.game.get_tables())
-		self.spieler.setColumnHidden(0,True)
+#		self.spieler.setColumnHidden(0,True)
 		self.spieler.sortByColumn(1,QtCore.Qt.DescendingOrder)
 		self.spieler.setSortingEnabled(True)
-		self.playedwith.setColumnHidden(1,True)
+#		self.playedwith.setColumnHidden(1,True)
 		self.playedwith.sortByColumn(2,QtCore.Qt.DescendingOrder)
 		self.playedwith.setSortingEnabled(True)
 		self.refresh_player_list()
