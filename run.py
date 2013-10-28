@@ -8,6 +8,7 @@ from beamer import Ui_beamer as beamer_window
 import sqlite3
 import math
 import pickle
+import os
 
 
 class MyTable(QtGui.QTableWidget):
@@ -358,6 +359,7 @@ ORDER BY
 			self.db_cursor.execute("SELECT count(*) FROM players")
 			self.db_cursor.fetchone()
 		except:
+			os.unlink("save_game")
 			self.db_cursor.execute("""
 CREATE TABLE 
 	players 
