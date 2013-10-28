@@ -302,12 +302,12 @@ class Game():
 		return [[{'name':y.name,'pid':y.pid,'points':y.points} for y in x]for x in self.games]
 	def set_players_per_table(self,i):
 		self.players_per_table=i
-		open("players_per_table").write(str(i))
+		open("players_per_table","w").write(str(i))
 	def get_players_per_table(self):
 		return self.players_per_table
 	def set_tables(self,i):
 		self.tables=i
-		open("tables").write(str(i))
+		open("tables","w").write(str(i))
 	def get_tables(self):
 		return self.tables
 	def get_played_with_for_player(self,pid):
