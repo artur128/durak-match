@@ -106,7 +106,7 @@ class BeamerWindow(QtGui.QMainWindow, beamer_window):
 				a.setHorizontalHeaderItem(1, item)
 
 				a.setColumnWidth(0,40)
-				a.setColumnWidth(1,40)
+				a.setColumnWidth(1,20)
 
 				a.setColumnHidden(0,True)
 				a.horizontalHeader().setStretchLastSection(True)
