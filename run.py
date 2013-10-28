@@ -22,6 +22,9 @@ class MyTable(QtGui.QTableWidget):
 		self.setAcceptDrops(True)
 		self.setDragEnabled(True)
 		self.setDropIndicatorShown(True)
+		fo=QtGui.QFont()
+		fo.setPointSize(16)
+		self.setFont(fo)
 
 	def dragEnterEvent(self, e):
 		if e.source()!=self:
