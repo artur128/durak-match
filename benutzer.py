@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'benutzer.ui'
 #
-# Created: Fri Oct 25 16:23:01 2013
+# Created: Mon Oct 28 19:29:56 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -133,7 +133,7 @@ class Ui_MainWindow(object):
         MainWindow.setTabOrder(self.addPlayer, self.spieler)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Durak-Spieler", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("MainWindow", "Neuer Spieler Name:", None, QtGui.QApplication.UnicodeUTF8))
         self.addPlayer.setText(QtGui.QApplication.translate("MainWindow", "Hinzufügen", None, QtGui.QApplication.UnicodeUTF8))
         self.label_3.setText(QtGui.QApplication.translate("MainWindow", "Spieler pro", None, QtGui.QApplication.UnicodeUTF8))

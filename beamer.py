@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'beamer.ui'
 #
-# Created: Fri Oct 25 16:23:01 2013
+# Created: Mon Oct 28 19:29:56 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -58,7 +58,7 @@ class Ui_beamer(object):
         QtCore.QMetaObject.connectSlotsByName(beamer)
 
     def retranslateUi(self, beamer):
-        beamer.setWindowTitle(QtGui.QApplication.translate("beamer", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
+        beamer.setWindowTitle(QtGui.QApplication.translate("beamer", "Durak-Matches", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_2.setText(QtGui.QApplication.translate("beamer", "DONE", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_3.setText(QtGui.QApplication.translate("beamer", "REROLL", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton.setText(QtGui.QApplication.translate("beamer", "REFRESH", None, QtGui.QApplication.UnicodeUTF8))
