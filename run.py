@@ -283,7 +283,7 @@ class Game():
 		self.games=[[gamers[k] for k in t] for t in a]
 		pickle.dump([[y.pid for y in x] for x in self.games],open("save_game","wb"))
 	def new_table_allocation(self):
-		self.db_cursor.execute("""SELECT * from players order by points""")
+		self.db_cursor.execute("""SELECT * from players order by points,name""")
 		gamers=[spieler(x['name'],x['id'],x['points']) for x in self.db_cursor.fetchall()]
 
 		for m in gamers:
