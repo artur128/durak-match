@@ -336,7 +336,7 @@ ORDER BY
 		self.db_cursor.execute("""UPDATE players set points=? where id=?""",(newpoints,pid))
 		self.db_connection.commit()
 	def add_player(self,newplayername):
-		if not ( (not (newplayername=="")) and (" " not in newplayername)):
+		if not ( (not (newplayername==""))):
 			raise Exception("Not Valid username")
 		self.db_cursor.execute("""INSERT INTO players (name,points) VALUES (?,?)""",(newplayername,0))
 		self.db_connection.commit()
